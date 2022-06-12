@@ -1,11 +1,12 @@
 <template>
   <v-app dark>
     <v-navigation-drawer
-      v-model="drawer"
+      v-model="sidebarVisible"
       :mini-variant="miniVariant"
       :clipped="clipped"
       fixed
       app
+      temporary
     >
       <v-list>
         <v-list-item
@@ -22,10 +23,11 @@
             <v-list-item-title v-text="item.title" />
           </v-list-item-content>
         </v-list-item>
+        <v-btn @click="toggleSidebar">サイドバー</v-btn>
       </v-list>
     </v-navigation-drawer>
     <v-app-bar :clipped-left="clipped" fixed app>
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
+      <v-app-bar-nav-icon @click.stop="toggleSidebar" />
       <v-btn icon @click.stop="miniVariant = !miniVariant">
         <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
       </v-btn>
@@ -87,6 +89,28 @@ export default {
       rightDrawer: false,
       title: 'Vuetify.js',
     }
+  },
+  computed: {
+    sidebarVisible: {
+      get() {
+        return this.$store.state.layout.sidebarVisible
+      },
+      set(visible) {
+        console.log(visible)
+        if (!visible) {
+          // this.toggleSidebar()
+          this.closeSidebar()
+        }
+      },
+    },
+  },
+  methods: {
+    toggleSidebar() {
+      this.$store.dispatch('layout/toggleSidebar')
+    },
+    closeSidebar() {
+      this.$store.dispatch('layout/closeSidebar')
+    },
   },
 }
 </script>
